@@ -8,7 +8,7 @@ Le travail suit une **pipeline expérimentale progressive**, allant d'une tâche
 
 ---
 
-## 🎯 Objectifs
+## Objectifs
 
 - Apprendre la navigation et le contrôle du ballon de manière robuste  
 - Éviter le sur-apprentissage sur des trajectoires fixes  
@@ -17,7 +17,7 @@ Le travail suit une **pipeline expérimentale progressive**, allant d'une tâche
 
 ---
 
-## 🧪 Pipeline expérimentale
+## Pipeline expérimentale
 
 Le projet est entièrement versionné via des branches Git :
 
@@ -48,7 +48,7 @@ Le projet est entièrement versionné via des branches Git :
 
 ---
 
-## 📂 Structure du dépôt
+## Structure du dépôt
 
 - `main` → Implémentation finale du duel  
 - `dev` → Branche d'intégration  
@@ -57,7 +57,7 @@ Le projet est entièrement versionné via des branches Git :
 
 ---
 
-## 🛠️ Outils & bibliothèques
+## Outils & bibliothèques
 
 - Python  
 - Stable-Baselines3 (PPO)  
@@ -68,7 +68,7 @@ Le projet est entièrement versionné via des branches Git :
 
 ---
 
-## 📈 Résultats
+## Résultats
 
 L'agent final montre :  
 
@@ -78,9 +78,9 @@ L'agent final montre :
 
 ---
 
-## ✍️ Auteurs
+## Auteurs
 
 - Paul Faroult  
 - Ba Thong Nguyen  
 
-Projet académique développé dans le cadre de recherches et expérimentations en apprentissage par renforcement.
+Projet académique développé dans le cadre d'expérimentations en apprentissage par renforcement.
