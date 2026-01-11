@@ -1,5 +1,5 @@
 """"
-Version contre un robot static
+Version contre un robot static sans reward de collisions
 """
 # Hérite du fichier principal
 from limo_soccer_env import (
