@@ -14,7 +14,7 @@ from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
 # dossier où se trouve train.py
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward")
+LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward_2")
 os.makedirs(LOG_DIR, exist_ok=True)
 
 CHECKPOINT_FREQ = 1_000_000  # sauvegarde tous les X timesteps
@@ -23,7 +23,7 @@ MODEL_NAME = "ppo_limo_checkpoint"
 VEC_NAME = "vecnormalize_checkpoint.pkl"
 
 N_ENVS = 4
-# Le modèle 7correspond au modèle qui à été entrainé contre le deuxième robot static sans reward
+
 opponent_model_path = "models_7/ppo_limo_checkpoint.zip"
 
 # --------- callback pour sauvegarde automatique ----------
@@ -134,7 +134,7 @@ if __name__ == "__main__":
             tensorboard_log=os.path.join(LOG_DIR, "tb")
         )
         # Pour afficher Tensorboard, aller dans un terminal,
-        # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\limo-soccer-rl\models_duel_sans_reward\tb"
+        # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\limo-soccer-rl\models_duel_sans_reward_2\tb"
         # puis ouvir le local host
 
 
