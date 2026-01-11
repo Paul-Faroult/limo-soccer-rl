@@ -1,3 +1,6 @@
+"""
+Entrainement affrontement entre 2 robot sans mis en place de reward pour les collisions.
+"""
 import os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize, SubprocVecEnv
@@ -6,12 +9,12 @@ from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import CallbackList
 import numpy as np
 
-from limo_soccer_env_static_opponent_reward import LimoSoccerEnvStaticRobot
+from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
 
 # dossier où se trouve train.py
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_DIR = os.path.join(CURRENT_DIR, "models_reward")
+LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward")
 os.makedirs(LOG_DIR, exist_ok=True)
 
 CHECKPOINT_FREQ = 1_000_000  # sauvegarde tous les X timesteps
@@ -20,6 +23,8 @@ MODEL_NAME = "ppo_limo_checkpoint"
 VEC_NAME = "vecnormalize_checkpoint.pkl"
 
 N_ENVS = 4
+# Le modèle 7correspond au modèle qui à été entrainé contre le deuxième robot static sans reward
+opponent_model_path = "models_7/ppo_limo_checkpoint.zip"
 
 # --------- callback pour sauvegarde automatique ----------
 class SaveOnStepCallback(BaseCallback):
@@ -75,15 +80,12 @@ class GoalTensorboardCallback(BaseCallback):
 # --------- création de l'environnement ----------
 def make_env_fn(seed=0, render_mode=None):
     def _init():
-        env = LimoSoccerEnvStaticRobot(render_mode=render_mode)
+        env = LimoSoccerEnvDuel(opponent_model_path, render_mode=render_mode)
         env = Monitor(env)
         return env
     return _init
 
 if __name__ == "__main__":
-    
-    # créer l'environnement vectorisé
-    #venv = DummyVecEnv([make_env_fn()])
 
     # créer l'environnement parallélisé
     venv = SubprocVecEnv([make_env_fn(i) for i in range(N_ENVS)])
@@ -102,6 +104,18 @@ if __name__ == "__main__":
     if os.path.exists(model_path + ".zip"):
         model = PPO.load(model_path, env=venv)
         print("Modèle chargé depuis le checkpoint")
+
+        from stable_baselines3.common.logger import configure
+
+        new_tb_log = os.path.join(LOG_DIR, "tb")
+
+        new_logger = configure(
+            new_tb_log,
+            ["stdout", "tensorboard"]
+        )
+
+        model.set_logger(new_logger)
+
     else:
         model = PPO(
             "MlpPolicy",
@@ -120,7 +134,7 @@ if __name__ == "__main__":
             tensorboard_log=os.path.join(LOG_DIR, "tb")
         )
         # Pour afficher Tensorboard, aller dans un terminal,
-        # tensorboard --logdir "C:\Users\fpaul\OneDrive\Bureau\Github\Static_opponent\models_reward\tb"
+        # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\dev\models_duel_sans_reward\tb"
         # puis ouvir le local host
 
 
@@ -131,7 +145,7 @@ if __name__ == "__main__":
     ])
 
     # démarrer l'entraînement 
-    TIMESTEPS = 50_000_000
+    TIMESTEPS = 20_000_000
     model.learn(total_timesteps=TIMESTEPS, callback=callbacks)
 
     # sauvegarde finale

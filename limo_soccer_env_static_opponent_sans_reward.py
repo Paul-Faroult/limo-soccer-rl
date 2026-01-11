@@ -1,5 +1,5 @@
 """"
-Version contre un robot static et implémentation d'une reward pour éviter les collisions
+Version contre un robot static
 """
 # Hérite du fichier principal
 from limo_soccer_env import (
@@ -260,27 +260,6 @@ class LimoSoccerEnvStaticRobot(LimoSoccerEnv):
         
         pygame.display.flip()
         self.clock.tick(FPS)
-
-    # Surcharge de la reward
-    def _compute_reward(self):
-        reward = super()._compute_reward()
-
-        diff = self.car_pos - self.static_robot_pos
-        dist = np.linalg.norm(diff) 
-
-        # ---------- pénalité UNIQUEMENT si l'obstacle gêne ----------
-        if dist < self.SAFE_DIST_STATIC:
-            penalty = (self.SAFE_DIST_STATIC - dist) / self.SAFE_DIST_STATIC
-            reward -= 0.1 * penalty 
-
-        # ---------- collision = quasi-échec ----------
-        if dist < self.COLLISION_DIST_STATIC:
-            reward -= 2.0
-            self.static_collisions += 1
-
-        return float(reward)
-
-
     
     # Surcharge de Step pour afficher les collisions dans Tensorboard
     def step(self, action):
@@ -294,8 +273,6 @@ class LimoSoccerEnvStaticRobot(LimoSoccerEnv):
             self.static_collisions = 0
 
         return obs, reward, terminated, truncated, info
-
-
 
 
 # =====================================================
