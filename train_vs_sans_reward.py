@@ -134,7 +134,7 @@ if __name__ == "__main__":
             tensorboard_log=os.path.join(LOG_DIR, "tb")
         )
         # Pour afficher Tensorboard, aller dans un terminal,
-        # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\dev\models_duel_sans_reward\tb"
+        # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\limo-soccer-rl\models_duel_sans_reward\tb"
         # puis ouvir le local host
 
 
