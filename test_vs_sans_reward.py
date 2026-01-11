@@ -9,7 +9,7 @@ from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_DIR = os.path.join(CURRENT_DIR, "models_duel")
+LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward")
 MODEL_PATH = os.path.join(LOG_DIR, "ppo_limo_checkpoint") 
 VEC_PATH = os.path.join(LOG_DIR, "vecnormalize_checkpoint.pkl")
 
