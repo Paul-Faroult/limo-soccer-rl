@@ -1,1 +1,4 @@
+[![Regarder la vidéo](https://img.youtube.com/vi/H1QXSBSBZR4/0.jpg)](https://youtu.be/H1QXSBSBZR4)
+
+
 <img width="888" height="814" alt="Courbe_tensorboard" src="https://github.com/user-attachments/assets/3e1a774f-3960-445e-b49f-15450a6eefab" />
