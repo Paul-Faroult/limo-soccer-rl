@@ -1,3 +1,7 @@
+"""
+Docstring for limo_soccer_env_duel_sans_reward
+/!\ Bien pensé à modifier ici les modèles de l'opposant !!!
+"""
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -79,7 +83,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_7/vecnormalize_checkpoint.pkl",
+            "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
             dummy_env
         )
 
@@ -368,7 +372,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_7/ppo_limo_checkpoint.zip",
+        opponent_model_path="models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
         render_mode="human"
     )
 
