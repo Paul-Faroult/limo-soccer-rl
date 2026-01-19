@@ -5,11 +5,11 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
 
-from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
+from limo_soccer_env_duel_no_limit import LimoSoccerEnvDuel
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
 
-LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward_2_finetune")
+LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_no_limit")
 MODEL_PATH = os.path.join(LOG_DIR, "ppo_limo_finetune") 
 VEC_PATH = os.path.join(LOG_DIR, "vecnormalize_finetune.pkl")
 

@@ -24,8 +24,8 @@ MODEL_A = {
 }
 
 MODEL_B = {
-    "name": "finetune",
-    "model": "models_duel_sans_reward_2_finetune/ppo_limo_finetune.zip"
+    "name": "no_limit",
+    "model": "models_duel_no_limit/ppo_limo_finetune.zip"
 }
 
 # ======================================================
@@ -91,7 +91,7 @@ with open(CSV_PATH, "w", newline="") as f:
 
         # Écriture CSV
         writer.writerow([ep, "base", goals_base, goals_finetune, res_base])
-        writer.writerow([ep, "finetune", goals_finetune, goals_base, res_finetune])
+        writer.writerow([ep, "no_limit", goals_finetune, goals_base, res_finetune])
 
         if ep % 50 == 0:
             print(f"[{ep}/{N_EPISODES}] {goals_base}-{goals_finetune} → {res_base}/{res_finetune}")

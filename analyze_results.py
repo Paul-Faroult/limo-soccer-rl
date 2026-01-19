@@ -22,7 +22,7 @@ df["result_num"] = df["result"].map(result_map)
 
 # ------------------- RENOMMER LES AGENTS -------------------
 # Si tu as des colonnes 'agent' avec "base" ou "finetune"
-df["agent_name"] = df["agent"].replace({"base": "Base", "finetune": "Finetune"})
+df["agent_name"] = df["agent"].replace({"base": "Base", "no_limite": "No_limit"})
 
 # ------------------- CALCUL DES STATISTIQUES -------------------
 summary = df.groupby("agent_name").agg({

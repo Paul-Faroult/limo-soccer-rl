@@ -13,7 +13,7 @@ from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import BaseCallback, CallbackList
 from stable_baselines3.common.logger import configure
 
-from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
+from limo_soccer_env_duel_no_limit import LimoSoccerEnvDuel
 
 # ======================================================
 # CONFIGURATION GLOBALE
@@ -27,7 +27,7 @@ BASE_MODEL_NAME = "ppo_limo_checkpoint"
 BASE_VEC_NAME = "vecnormalize_checkpoint.pkl"
 
 # --------- NOUVEAU MODÈLE (FINE-TUNING) ----------
-FINE_TUNE_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward_2_finetune")
+FINE_TUNE_DIR = os.path.join(CURRENT_DIR, "models_duel_no_limit")
 os.makedirs(FINE_TUNE_DIR, exist_ok=True)
 
 MODEL_NAME = "ppo_limo_finetune"
@@ -176,7 +176,7 @@ if __name__ == "__main__":
     model.set_logger(new_logger)
 
     # Pour afficher Tensorboard, aller dans un terminal,
-    # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\limo-soccer-rl\models_duel_sans_reward_2_finetune\tb"
+    # tensorboard --logdir "C:\Users\fpaul\OneDrive\Documents\Github\limo-soccer-rl\models_duel_no_limit\tb"
     # puis ouvir le local host
 
     # --------- CALLBACKS ----------
