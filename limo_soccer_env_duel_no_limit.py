@@ -33,7 +33,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
 
-from limo_soccer_env_static_opponent_sans_reward import LimoSoccerEnvStaticRobot
+from limo_soccer_env_static_opponent import LimoSoccerEnvStaticRobot
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -98,6 +98,12 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         self.goals_agent = 0
         self.goals_opponent = 0
 
+        self.max_goals = 5 # nombre total de buts pour arrêter l'épisode
+
+        self.steps_since_last_goal = 0
+        self.nb_goals = 0
+        self.max_steps_no_goal = 30 * FPS  # 30 secondes × FPS
+
     # ========================================================
     # RESET
     # ========================================================
@@ -129,6 +135,10 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         # variables analyse
         self.goals_agent = 0
         self.goals_opponent = 0
+
+        self.steps_since_last_goal = 0
+
+        self.nb_goals = 0
 
         return self._observe(), info
     
@@ -220,8 +230,24 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         # ajouter la métrique
         info["static_collisions"] = self.static_collisions
 
-        # reset pour l’épisode suivant
-        if terminated or truncated:
+        # nouvel arrêt basé sur le nombre de buts
+        total_goals = self.goals_agent + self.goals_opponent
+        terminated = total_goals >= self.max_goals
+        truncated = False
+
+        # Si un but a été marqué, reset du compteur
+        if self.goals_agent + self.goals_opponent > self.nb_goals:
+            self.steps_since_last_goal = 0
+            self.nb_goals += 1
+
+        self.steps_since_last_goal += 1
+
+        # Vérifier si 30 secondes sans but
+        if self.steps_since_last_goal >= self.max_steps_no_goal:
+            self._reset_ball_center()
+            self.steps_since_last_goal = 0
+
+        if terminated:
             if self.goals_agent > self.goals_opponent:
                 info["result"] = "win"
             elif self.goals_agent < self.goals_opponent:
@@ -231,7 +257,6 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
             info["goals_agent"] = self.goals_agent
             info["goals_opponent"] = self.goals_opponent
-            
             self.static_collisions = 0
 
         return obs, reward, terminated, truncated, info
