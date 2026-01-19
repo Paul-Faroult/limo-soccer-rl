@@ -1,72 +1,98 @@
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
-import os
 
-# ------------------- CONFIG -------------------
-INPUT_CSV = os.path.join("evaluation", "results_duel.csv")
-OUTPUT_DIR = "evaluation"
-os.makedirs(OUTPUT_DIR, exist_ok=True)
+# ======================================================
+# PATHS
+# ======================================================
 
-# ------------------- LIRE LES DONNEES -------------------
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+EVAL_DIR = os.path.join(BASE_DIR, "evaluation")
+
+INPUT_CSV = os.path.join(EVAL_DIR, "results_duel.csv")
+PLOT_DIR = os.path.join(EVAL_DIR, "plots")
+SUMMARY_PATH = os.path.join(EVAL_DIR, "summary.csv")
+
+os.makedirs(PLOT_DIR, exist_ok=True)
+
+# ======================================================
+# LOAD DATA
+# ======================================================
+
 df = pd.read_csv(INPUT_CSV)
 
-# Assurer que chaque ligne contient un seul résultat correct
-df["result"] = df["result"].str.strip().str.lower()
-valid_results = ["win", "draw", "lose"]
-df = df[df["result"].isin(valid_results)]
+# ======================================================
+# METRICS
+# ======================================================
 
-# ------------------- CONVERTIR RESULTATS EN NUMERIQUE -------------------
-# win=1, draw=0.5, lose=0
-result_map = {"win": 1, "draw": 0.5, "lose": 0}
-df["result_num"] = df["result"].map(result_map)
+df["win"] = (df["result"] == "win").astype(int)
+df["loss"] = (df["result"] == "lose").astype(int)
+df["draw"] = (df["result"] == "draw").astype(int)
 
-# ------------------- RENOMMER LES AGENTS -------------------
-# Si tu as des colonnes 'agent' avec "base" ou "finetune"
-df["agent_name"] = df["agent"].replace({"base": "Base", "no_limite": "No_limit"})
+df["goal_diff"] = df["goals_scored"] - df["goals_conceded"]
 
-# ------------------- CALCUL DES STATISTIQUES -------------------
-summary = df.groupby("agent_name").agg({
-    "result_num": "mean",          # Win rate moyen
-    "goals_scored": "mean",
-    "goals_conceded": "mean"
-}).reset_index()
+# ======================================================
+# SUMMARY TABLE
+# ======================================================
 
-summary.rename(columns={
-    "result_num": "win_rate_%",
-    "goals_scored": "avg_goals_scored",
-    "goals_conceded": "avg_goals_conceded"
-}, inplace=True)
+summary = df.groupby("agent").agg(
+    matches=("episode", "count"),
+    win_rate=("win", "mean"),
+    draw_rate=("draw", "mean"),
+    loss_rate=("loss", "mean"),
+    goals_scored=("goals_scored", "mean"),
+    goals_conceded=("goals_conceded", "mean"),
+    goal_diff=("goal_diff", "mean"),
+).reset_index()
 
-summary["win_rate_%"] *= 100
+summary[["win_rate", "draw_rate", "loss_rate"]] *= 100
+summary.to_csv(SUMMARY_PATH, index=False)
 
-# Sauvegarde CSV
-summary_csv_path = os.path.join(OUTPUT_DIR, "summary.csv")
-summary.to_csv(summary_csv_path, index=False)
-print(f"Résumé statistique sauvegardé : {summary_csv_path}")
+print("Résumé statistique sauvegardé :", SUMMARY_PATH)
+print(summary)
 
-# ------------------- VISUALISATION -------------------
-# Bar plot Win rate
-plt.figure(figsize=(6,4))
-plt.bar(summary["agent_name"], summary["win_rate_%"], color=["skyblue","salmon"])
-plt.ylabel("Win rate (%)")
-plt.title("Win rate moyen par agent")
-plt.ylim(0,100)
-plt.grid(axis='y', linestyle='--', alpha=0.5)
-plt.savefig(os.path.join(OUTPUT_DIR, "win_rate.png"))
+# ======================================================
+# PLOTS
+# ======================================================
+
+def bar(metric, ylabel, title=None):
+    plt.figure()
+    summary.set_index("agent")[metric].plot(kind="bar")
+    plt.ylabel(ylabel)
+    plt.title(title if title else metric)
+    plt.tight_layout()
+    plt.savefig(os.path.join(PLOT_DIR, f"{metric}.png"))
+    plt.close()
+
+# --- Barplots principaux ---
+bar("win_rate", "Win rate (%)", "Win rate par agent")
+bar("goals_scored", "Buts marqués", "Buts marqués par match")
+bar("goals_conceded", "Buts concédés", "Buts concédés par match")
+bar("goal_diff", "Différence de buts", "Différence moyenne de buts")
+
+# --- Boxplots (distribution) ---
+plt.figure()
+df.boxplot(column="goals_scored", by="agent")
+plt.title("Distribution des buts marqués")
+plt.suptitle("")
+plt.tight_layout()
+plt.savefig(os.path.join(PLOT_DIR, "box_goals_scored.png"))
 plt.close()
 
-# Bar plot Avg Goals Scored / Conceded
-plt.figure(figsize=(6,4))
-width = 0.35
-x = range(len(summary))
-plt.bar(x, summary["avg_goals_scored"], width, label="Goals Scored", color="lightgreen")
-plt.bar([i+width for i in x], summary["avg_goals_conceded"], width, label="Goals Conceded", color="lightcoral")
-plt.xticks([i+width/2 for i in x], summary["agent_name"])
-plt.ylabel("Goals")
-plt.title("Buts marqués et concédés moyens")
-plt.legend()
-plt.grid(axis='y', linestyle='--', alpha=0.5)
-plt.savefig(os.path.join(OUTPUT_DIR, "goals_avg.png"))
+plt.figure()
+df.boxplot(column="goals_conceded", by="agent")
+plt.title("Distribution des buts concédés")
+plt.suptitle("")
+plt.tight_layout()
+plt.savefig(os.path.join(PLOT_DIR, "box_goals_conceded.png"))
 plt.close()
 
-print("Plots sauvegardés dans le dossier evaluation")
+plt.figure()
+df.boxplot(column="goal_diff", by="agent")
+plt.title("Distribution de la différence de buts")
+plt.suptitle("")
+plt.tight_layout()
+plt.savefig(os.path.join(PLOT_DIR, "box_goal_diff.png"))
+plt.close()
+
+print("Graphiques générés dans :", PLOT_DIR)
