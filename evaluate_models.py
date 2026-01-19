@@ -6,105 +6,95 @@ from stable_baselines3.common.monitor import Monitor
 from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
 
 # ======================================================
-# CONFIGURATION
+# CONFIG
 # ======================================================
 
-N_EPISODES = 500   # nombre d'épisodes pour la comparaison
-MAX_STEPS = 5000
+N_EPISODES = 10_000
 
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 EVAL_DIR = os.path.join(BASE_DIR, "evaluation")
 os.makedirs(EVAL_DIR, exist_ok=True)
 
-CSV_PATH = os.path.join(EVAL_DIR, "results.csv")
+CSV_PATH = os.path.join(EVAL_DIR, "results_duel.csv")
 
-# --------- MODELS A ET B ----------
 MODEL_A = {
     "name": "base",
-    "model_path": "models_duel_sans_reward_2/ppo_limo_checkpoint",
-    "vec_path": "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl"
+    "model": "models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
+    "vec": "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl"
 }
 
 MODEL_B = {
     "name": "finetune",
-    "model_path": "models_duel_sans_reward_2_finetune/ppo_limo_finetune",
-    "vec_path": "models_duel_sans_reward_2_finetune/vecnormalize_finetune.pkl"
+    "model": "models_duel_sans_reward_2_finetune/ppo_limo_finetune.zip"
 }
 
 # ======================================================
-# FONCTION POUR CRÉER L'ENV
+# ENV
 # ======================================================
 
 def make_env(opponent_path):
     def _init():
         env = LimoSoccerEnvDuel(opponent_path, render_mode=None)
-        env = Monitor(env)
-        return env
+        return Monitor(env)
     return _init
 
 # ======================================================
-# LOAD MODEL
+# LOAD ENV + MODELS
 # ======================================================
 
-def load_model(cfg, opponent_zip):
-    env = DummyVecEnv([make_env(opponent_zip)])
-    env = VecNormalize.load(cfg["vec_path"], env)
-    env.training = False
-    env.norm_reward = False
-    model = PPO.load(cfg["model_path"], env=env)
-    return model, env
+env = DummyVecEnv([make_env(MODEL_B["model"])])
+env = VecNormalize.load(MODEL_A["vec"], env)
+env.training = False
+env.norm_reward = False
 
-model_A, env_A = load_model(MODEL_A, MODEL_B["model_path"] + ".zip")
-model_B, env_B = load_model(MODEL_B, MODEL_A["model_path"] + ".zip")
+model_A = PPO.load(MODEL_A["model"], env=env)
+model_B = PPO.load(MODEL_B["model"])
 
 # ======================================================
-# BOUCLE D'ÉVALUATION
+# EVALUATION LOOP
 # ======================================================
 
 with open(CSV_PATH, "w", newline="") as f:
     writer = csv.writer(f)
     writer.writerow([
-        "episode", "model",
-        "goals", "goals_conceded",
-        "collisions", "reward",
-        "steps", "win"
+        "episode",
+        "agent",
+        "goals_scored",
+        "goals_conceded",
+        "result"  # win / lose / draw
     ])
 
     for ep in range(N_EPISODES):
-        for model, env, label in [
-            (model_A, env_A, "A"),
-            (model_B, env_B, "B")
-        ]:
-            obs = env.reset()
-            done = False
-            total_reward = 0
-            steps = 0
-            goals = 0
-            goals_conceded = 0
-            collisions = 0
+        obs = env.reset()
+        done = False
+        final_info = None
 
-            while not done and steps < MAX_STEPS:
-                action, _ = model.predict(obs, deterministic=True)
-                obs, reward, done, infos = env.step(action)
+        while not done:
+            # Base joue
+            action_A, _ = model_A.predict(obs, deterministic=True)
+            obs, _, done, infos = env.step(action_A)
+            final_info = infos[0]
 
-                info = infos[0]
-                total_reward += reward[0]
-                steps += 1
+        # Stats des deux agents
+        goals_base = final_info.get("goals_agent", 0)
+        goals_finetune = final_info.get("goals_opponent", 0)
 
-                goals += info.get("goals", 0)
-                goals_conceded += info.get("goals_conceded", 0)
-                collisions += info.get("static_collisions", 0)
+        # Déterminer le résultat
+        if goals_base > goals_finetune:
+            res_base = "win"
+            res_finetune = "lose"
+        elif goals_base < goals_finetune:
+            res_base = "lose"
+            res_finetune = "win"
+        else:
+            res_base = res_finetune = "draw"
 
-            win = 1 if goals > goals_conceded else 0
-
-            writer.writerow([
-                ep, label,
-                goals, goals_conceded,
-                collisions, total_reward,
-                steps, win
-            ])
+        # Écriture CSV
+        writer.writerow([ep, "base", goals_base, goals_finetune, res_base])
+        writer.writerow([ep, "finetune", goals_finetune, goals_base, res_finetune])
 
         if ep % 50 == 0:
-            print(f"{ep}/{N_EPISODES} épisodes évalués")
+            print(f"[{ep}/{N_EPISODES}] {goals_base}-{goals_finetune} → {res_base}/{res_finetune}")
 
-print("Évaluation terminée :", CSV_PATH)
+print("Évaluation terminée")
+print(f"Résultats sauvegardés dans : {CSV_PATH}")

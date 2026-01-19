@@ -1,69 +1,72 @@
-import os
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
-# ======================================================
-# PATHS
-# ======================================================
+# ------------------- CONFIG -------------------
+INPUT_CSV = os.path.join("evaluation", "results_duel.csv")
+OUTPUT_DIR = "evaluation"
+os.makedirs(OUTPUT_DIR, exist_ok=True)
 
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-EVAL_DIR = os.path.join(BASE_DIR, "evaluation")
-CSV_PATH = os.path.join(EVAL_DIR, "results.csv")
-PLOT_DIR = os.path.join(EVAL_DIR, "plots")
-SUMMARY_PATH = os.path.join(EVAL_DIR, "summary.csv")
+# ------------------- LIRE LES DONNEES -------------------
+df = pd.read_csv(INPUT_CSV)
 
-os.makedirs(PLOT_DIR, exist_ok=True)
+# Assurer que chaque ligne contient un seul résultat correct
+df["result"] = df["result"].str.strip().str.lower()
+valid_results = ["win", "draw", "lose"]
+df = df[df["result"].isin(valid_results)]
 
-# ======================================================
-# LOAD DATA
-# ======================================================
+# ------------------- CONVERTIR RESULTATS EN NUMERIQUE -------------------
+# win=1, draw=0.5, lose=0
+result_map = {"win": 1, "draw": 0.5, "lose": 0}
+df["result_num"] = df["result"].map(result_map)
 
-df = pd.read_csv(CSV_PATH)
+# ------------------- RENOMMER LES AGENTS -------------------
+# Si tu as des colonnes 'agent' avec "base" ou "finetune"
+df["agent_name"] = df["agent"].replace({"base": "Base", "finetune": "Finetune"})
 
-# ======================================================
-# SUMMARY STATISTICS
-# ======================================================
-
-summary = df.groupby("model").agg({
-    "win": "mean",
-    "goals": "mean",
-    "goals_conceded": "mean",
-    "collisions": "mean",
-    "reward": "mean",
-    "steps": "mean"
+# ------------------- CALCUL DES STATISTIQUES -------------------
+summary = df.groupby("agent_name").agg({
+    "result_num": "mean",          # Win rate moyen
+    "goals_scored": "mean",
+    "goals_conceded": "mean"
 }).reset_index()
 
-summary["win"] *= 100
-summary.rename(columns={"win": "win_rate_%"}, inplace=True)
-summary.to_csv(SUMMARY_PATH, index=False)
+summary.rename(columns={
+    "result_num": "win_rate_%",
+    "goals_scored": "avg_goals_scored",
+    "goals_conceded": "avg_goals_conceded"
+}, inplace=True)
 
-print("Résumé statistique sauvegardé :", SUMMARY_PATH)
+summary["win_rate_%"] *= 100
 
-# ======================================================
-# PLOTS
-# ======================================================
+# Sauvegarde CSV
+summary_csv_path = os.path.join(OUTPUT_DIR, "summary.csv")
+summary.to_csv(summary_csv_path, index=False)
+print(f"Résumé statistique sauvegardé : {summary_csv_path}")
 
-def bar(metric, ylabel):
-    plt.figure()
-    df.groupby("model")[metric].mean().plot(kind="bar")
-    plt.ylabel(ylabel)
-    plt.title(metric)
-    plt.tight_layout()
-    plt.savefig(os.path.join(PLOT_DIR, f"{metric}.png"))
-    plt.close()
-
-# Barplots simples
-bar("win", "Win rate (%)")
-bar("goals", "Goals")
-bar("collisions", "Collisions")
-bar("reward", "Reward")
-
-# Boxplots
-plt.figure()
-df.boxplot(column=["goals", "collisions", "reward"], by="model")
-plt.suptitle("")
-plt.tight_layout()
-plt.savefig(os.path.join(PLOT_DIR, "boxplots.png"))
+# ------------------- VISUALISATION -------------------
+# Bar plot Win rate
+plt.figure(figsize=(6,4))
+plt.bar(summary["agent_name"], summary["win_rate_%"], color=["skyblue","salmon"])
+plt.ylabel("Win rate (%)")
+plt.title("Win rate moyen par agent")
+plt.ylim(0,100)
+plt.grid(axis='y', linestyle='--', alpha=0.5)
+plt.savefig(os.path.join(OUTPUT_DIR, "win_rate.png"))
 plt.close()
 
-print("Graphiques générés dans :", PLOT_DIR)
+# Bar plot Avg Goals Scored / Conceded
+plt.figure(figsize=(6,4))
+width = 0.35
+x = range(len(summary))
+plt.bar(x, summary["avg_goals_scored"], width, label="Goals Scored", color="lightgreen")
+plt.bar([i+width for i in x], summary["avg_goals_conceded"], width, label="Goals Conceded", color="lightcoral")
+plt.xticks([i+width/2 for i in x], summary["agent_name"])
+plt.ylabel("Goals")
+plt.title("Buts marqués et concédés moyens")
+plt.legend()
+plt.grid(axis='y', linestyle='--', alpha=0.5)
+plt.savefig(os.path.join(OUTPUT_DIR, "goals_avg.png"))
+plt.close()
+
+print("Plots sauvegardés dans le dossier evaluation")

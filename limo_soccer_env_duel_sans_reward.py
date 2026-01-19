@@ -94,6 +94,10 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         self.SAFE_DIST_STATIC = CAR_W * 1.5
         self.COLLISION_DIST_STATIC = CAR_W
 
+        # variables analyse
+        self.goals_agent = 0
+        self.goals_opponent = 0
+
     # ========================================================
     # RESET
     # ========================================================
@@ -122,6 +126,10 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
         self.static_collisions = 0
 
+        # variables analyse
+        self.goals_agent = 0
+        self.goals_opponent = 0
+
         return self._observe(), info
     
     def _apply_action_only(self, action):
@@ -143,7 +151,21 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         if abs(accel) < 1e-3:
             self.car_speed *= (1.0 - LINEAR_DAMP * DT)
 
+    def _compute_reward(self):
+        goal_left = self._is_ball_in_left_goal()
+        goal_right = self._is_ball_in_right_goal()
 
+        reward = super()._compute_reward()
+
+        if goal_left:
+            self.goals_agent += 1
+
+        if goal_right:
+            self.goals_opponent += 1
+
+        return float(reward)
+
+    
     # ========================================================
     # STEP (PHYSIQUE UNIQUE)
     # ========================================================
@@ -200,6 +222,16 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
         # reset pour l’épisode suivant
         if terminated or truncated:
+            if self.goals_agent > self.goals_opponent:
+                info["result"] = "win"
+            elif self.goals_agent < self.goals_opponent:
+                info["result"] = "lose"
+            else:
+                info["result"] = "draw"
+
+            info["goals_agent"] = self.goals_agent
+            info["goals_opponent"] = self.goals_opponent
+            
             self.static_collisions = 0
 
         return obs, reward, terminated, truncated, info
