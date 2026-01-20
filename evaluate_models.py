@@ -101,5 +101,5 @@ with open(CSV_PATH, "w", newline="") as f:
         if ep % 100 == 0:
             print(f"[{ep}/{N_EPISODES}] épisodes")
 
-print("✅ Évaluation terminée")
-print(f"📄 Résultats : {CSV_PATH}")
+print("Évaluation terminée")
+print(f"Résultats : {CSV_PATH}")
