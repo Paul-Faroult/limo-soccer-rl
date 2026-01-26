@@ -93,11 +93,16 @@ limo-soccer-rl/
 - PyGame (affichage)  
 - TensorBoard (analyse de l'entraînement)
 
+Le choix de PPO est motivé par :
+- sa stabilité
+- sa bonne gestion des espaces continus
+- sa facilité d’instrumentation
+
 ---
 
 ## ⚙️Installation
 
-### 1. Cloner le dépôt
+### Cloner le dépôt
 
 ```
 git clone https://github.com/Paul-Faroult/limo-soccer-rl.git
@@ -124,6 +129,40 @@ pip install -r requirements.txt
 
 ### Agent solo
 
+```
+python train/train_solo.py
+```
+
+### Duel vs static
+
+```
+python train/train_static.py
+```
+
+### Duel 1v1
+
+```
+python train/train_duel.py
+```
+
+---
+
+## 📊 Évaluation & Analyse
+
+Comparer deux modèles en duel :
+
+```
+python eval/eval_models.py
+```
+
+Analyser les résultats (buts marqués, encaissés, winrate) :
+
+```
+python eval/analyze_results.py
+```
+
+---
+
 ## Résultats
 
 L'agent final montre :  
@@ -134,7 +173,7 @@ L'agent final montre :
 
 ---
 
-## Auteurs
+## 👤 Auteurs
 
 - Paul Faroult  
 - Ba Thong Nguyen  
