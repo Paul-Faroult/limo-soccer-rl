@@ -1,4 +1,4 @@
-# Limo Soccer RL
+# 🤖 Limo Soccer RL
 
 Projet de recherche et d’expérimentation en **apprentissage par renforcement (Reinforcement Learning)** appliqué à des robots mobiles de type LIMO évoluant dans un environnement de football robotique.
 
@@ -6,7 +6,7 @@ L’objectif est de construire une pipeline **progressive** allant d’un agent 
 
 ---
 
-## Objectifs du projet
+## 🎯 Objectifs du projet
 
 - Concevoir un **environnement Gymnasium** personnalisé pour le football robotique
 - Entraîner un agent via **PPO (Stable-Baselines3)**
@@ -19,7 +19,7 @@ Ce projet s’inscrit dans un cadre académique (Projet 5A) et vise une qualité
 
 ---
 
-## Pipeline expérimentale
+## 🧩 Pipeline expérimentale
 
 Le projet est entièrement versionné via des branches Git :
 
@@ -50,7 +50,7 @@ Le projet est entièrement versionné via des branches Git :
 
 ---
 
-## Structure du dépôt
+## 📁 Structure du dépôt
 
 - `main` → Implémentation finale du duel
 ```
@@ -94,6 +94,35 @@ limo-soccer-rl/
 - TensorBoard (analyse de l'entraînement)
 
 ---
+
+## ⚙️Installation
+
+### 1. Cloner le dépôt
+
+```
+git clone https://github.com/Paul-Faroult/limo-soccer-rl.git
+cd limo-soccer-rl
+```
+
+### Créer un environnement virtuel
+
+```
+python -m venv venv
+source venv/bin/activate # Linux / Mac
+venv\Scripts\activate # Windows
+```
+
+### Installer les dépendances
+
+```
+pip install -r requirements.txt
+```
+
+---
+
+## 🚀 Entraînement
+
+### Agent solo
 
 ## Résultats
 
