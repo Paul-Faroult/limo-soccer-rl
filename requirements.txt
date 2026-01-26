@@ -1,0 +1,6 @@
+numpy>=1.21
+gymnasium>=0.29
+stable-baselines3>=2.1
+pygame>=2.1
+tensorboard>=2.10
+cloudpickle>=2.2

@@ -1,3 +1,7 @@
+"""
+Docstring for limo_soccer_env_duel_sans_reward
+/!\ Bien pensé à modifier ici les modèles de l'opposant !!!
+"""
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -29,7 +33,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
 
-from limo_soccer_env_static_opponent import LimoSoccerEnvStaticRobot
+from limo_soccer_env_static_opponent_sans_reward import LimoSoccerEnvStaticRobot
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -79,7 +83,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_7/vecnormalize_checkpoint.pkl",
+            "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
             dummy_env
         )
 
@@ -89,6 +93,10 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         # Constante pour eviter le deuxième robot
         self.SAFE_DIST_STATIC = CAR_W * 1.5
         self.COLLISION_DIST_STATIC = CAR_W
+
+        # variables analyse
+        self.goals_agent = 0
+        self.goals_opponent = 0
 
     # ========================================================
     # RESET
@@ -118,6 +126,10 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
         self.static_collisions = 0
 
+        # variables analyse
+        self.goals_agent = 0
+        self.goals_opponent = 0
+
         return self._observe(), info
     
     def _apply_action_only(self, action):
@@ -139,7 +151,21 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         if abs(accel) < 1e-3:
             self.car_speed *= (1.0 - LINEAR_DAMP * DT)
 
+    def _compute_reward(self):
+        goal_left = self._is_ball_in_left_goal()
+        goal_right = self._is_ball_in_right_goal()
 
+        reward = super()._compute_reward()
+
+        if goal_left:
+            self.goals_agent += 1
+
+        if goal_right:
+            self.goals_opponent += 1
+
+        return float(reward)
+
+    
     # ========================================================
     # STEP (PHYSIQUE UNIQUE)
     # ========================================================
@@ -196,6 +222,16 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
         # reset pour l’épisode suivant
         if terminated or truncated:
+            if self.goals_agent > self.goals_opponent:
+                info["result"] = "win"
+            elif self.goals_agent < self.goals_opponent:
+                info["result"] = "lose"
+            else:
+                info["result"] = "draw"
+
+            info["goals_agent"] = self.goals_agent
+            info["goals_opponent"] = self.goals_opponent
+            
             self.static_collisions = 0
 
         return obs, reward, terminated, truncated, info
@@ -261,25 +297,6 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
         return np.array([ox, oy, oa, bx, by, ax, ay], dtype=np.float32)
     
-    # Surcharge de la reward
-    def _compute_reward(self):
-        reward = super()._compute_reward()
-
-        diff = self.car_pos - self.opp_pos
-        dist = np.linalg.norm(diff) 
-
-        # ---------- pénalité UNIQUEMENT si l'obstacle gêne ----------
-        if dist < self.SAFE_DIST_STATIC:
-            penalty = (self.SAFE_DIST_STATIC - dist) / self.SAFE_DIST_STATIC
-            reward -= 0.1 * penalty 
-
-        # ---------- collision = quasi-échec ----------
-        if dist < self.COLLISION_DIST_STATIC:
-            reward -= 2.0
-            self.static_collisions += 1
-
-        return float(reward)
-
     # ========================================================
     # RENDER
     # ========================================================
@@ -387,7 +404,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_7/ppo_limo_checkpoint.zip",
+        opponent_model_path="models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
         render_mode="human"
     )
 
