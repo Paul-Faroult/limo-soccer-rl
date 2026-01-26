@@ -81,16 +81,27 @@ limo-soccer-rl/
 │ └── train_duel.py
 │
 ├── eval/
+│ ├── evaluation/
+│ │ ├── goals_avg.png
+│ │ ├── results_duel.csv
+│ │ ├── summary.csv
+│ │ ├── win_rate.png
+│ │
 │ ├── eval_model.py
+│ ├── analyze_results.py
+│ ├── test_solo.py
+│ ├── test_static.py
 │ ├── test_vs_models_duel.py
-│ └── analyze_results.py
 │
-├── models/ # Modèles entraînés (ignoré par git)
-├── logs/ # TensorBoard logs (ignoré par git)
+├── models/ # Modèles entraînés
+│ ├── models_duel_sans_reward_2
+│ ├── models_duel_sans_reward_2_finetune
+│ ├── models_solo
+│ ├── models_static
 │
 ├── requirements.txt
-├── README.md
-└── .gitignore
+└── README.md
+
 ```
 - `dev` → Branche d'intégration  
 - `stage/*` → Jalons de développement validés  
@@ -157,6 +168,28 @@ python train/train_static.py
 
 ```
 python train/train_duel.py
+```
+
+---
+
+## 🚀 Test
+
+### Agent solo
+
+```
+python eval/test_solo.py
+```
+
+### Duel vs static
+
+```
+python eval/test_static.py
+```
+
+### Duel 1v1
+
+```
+python eval/test_vs_models_duel.py
 ```
 
 ---
