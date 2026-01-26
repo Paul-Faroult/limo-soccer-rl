@@ -18,6 +18,11 @@ L’objectif est de construire une pipeline **progressive** allant d’un agent 
 Ce projet s’inscrit dans un cadre académique (Projet 5A) et vise une qualité reproductible et analysable.
 
 ---
+## 🖼️ Environnement de simulation
+
+![Environnement](assets/env_duel.png)
+
+---
 
 ## 🧩 Pipeline expérimentale
 
