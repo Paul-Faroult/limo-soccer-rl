@@ -53,6 +53,7 @@ Le projet est entièrement versionné via des branches Git :
 ## Structure du dépôt
 
 - `main` → Implémentation finale du duel
+'''
 limo-soccer-rl/
 │
 ├── envs/
@@ -75,7 +76,8 @@ limo-soccer-rl/
 │
 ├── requirements.txt
 ├── README.md
-└── .gitignore  
+└── .gitignore
+''' 
 - `dev` → Branche d'intégration  
 - `stage/*` → Jalons de développement validés  
 - `experiment/*` → Approches exploratoires ou abandonnées
