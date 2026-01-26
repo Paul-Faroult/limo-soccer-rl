@@ -1,11 +1,8 @@
 # Limo Soccer RL
 
-## Football robotique autonome avec apprentissage par renforcement
+Projet de recherche et d’expérimentation en **apprentissage par renforcement (Reinforcement Learning)** appliqué à des robots mobiles de type LIMO évoluant dans un environnement de football robotique.
 
-Ce projet explore l'entraînement d'un robot autonome sur roues pour jouer à un jeu de football simplifié, en utilisant des techniques d'apprentissage par renforcement (PPO).
-
-Le travail suit une **pipeline expérimentale progressive**, allant d'une tâche simple de marquage de but jusqu'à un duel multi-agents compétitif.
-
+L’objectif est de construire une pipeline **progressive** allant d’un agent seul jusqu’à un **duel compétitif**, en étudiant la stabilité de l’apprentissage, la généralisation et les performances des politiques PPO.
 ---
 
 ## Objectifs
