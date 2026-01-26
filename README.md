@@ -18,6 +18,11 @@ L’objectif est de construire une pipeline **progressive** allant d’un agent 
 Ce projet s’inscrit dans un cadre académique (Projet 5A) et vise une qualité reproductible et analysable.
 
 ---
+## 🖼️ Environnement de simulation
+
+![Environnement](assets/env_duel.png)
+
+---
 
 ## 🧩 Pipeline expérimentale
 
@@ -32,7 +37,11 @@ Le projet est entièrement versionné via des branches Git :
 
 - **Étape 2 — RL classique**  
   - Positions aléatoires du robot et du ballon  
-  - PPO avec γ = 0,99  
+  - PPO avec γ = 0,99
+
+## ⚽ Solo – Exemple d’épisode
+![Solo PPO](assets/Solo.gif)
+
 
 - **Étape 3 — Adversaire statique**  
   - Adversaire figé  
@@ -41,6 +50,11 @@ Le projet est entièrement versionné via des branches Git :
 - **Étape 4 — Duel**  
   - Deux agents, buts indépendants  
   - Apprentissage par renforcement compétitif
+
+## ⚽Exemple d’épisode
+
+![Duel PPO](assets/Duel.gif)
+
 
 ### Expérimentations (abandonnées ou exploratoires)
 
@@ -93,11 +107,16 @@ limo-soccer-rl/
 - PyGame (affichage)  
 - TensorBoard (analyse de l'entraînement)
 
+Le choix de PPO est motivé par :
+- sa stabilité
+- sa bonne gestion des espaces continus
+- sa facilité d’instrumentation
+
 ---
 
 ## ⚙️Installation
 
-### 1. Cloner le dépôt
+### Cloner le dépôt
 
 ```
 git clone https://github.com/Paul-Faroult/limo-soccer-rl.git
@@ -124,6 +143,40 @@ pip install -r requirements.txt
 
 ### Agent solo
 
+```
+python train/train_solo.py
+```
+
+### Duel vs static
+
+```
+python train/train_static.py
+```
+
+### Duel 1v1
+
+```
+python train/train_duel.py
+```
+
+---
+
+## 📊 Évaluation & Analyse
+
+Comparer deux modèles en duel :
+
+```
+python eval/eval_models.py
+```
+
+Analyser les résultats (buts marqués, encaissés, winrate) :
+
+```
+python eval/analyze_results.py
+```
+
+---
+
 ## Résultats
 
 L'agent final montre :  
@@ -134,7 +187,7 @@ L'agent final montre :
 
 ---
 
-## Auteurs
+## 👤 Auteurs
 
 - Paul Faroult  
 - Ba Thong Nguyen  
