@@ -3,9 +3,10 @@
 Projet de recherche et d’expérimentation en **apprentissage par renforcement (Reinforcement Learning)** appliqué à des robots mobiles de type LIMO évoluant dans un environnement de football robotique.
 
 L’objectif est de construire une pipeline **progressive** allant d’un agent seul jusqu’à un **duel compétitif**, en étudiant la stabilité de l’apprentissage, la généralisation et les performances des politiques PPO.
+
 ---
 
-## Objectifs
+## Objectifs du projet
 
 - Apprendre la navigation et le contrôle du ballon de manière robuste  
 - Éviter le sur-apprentissage sur des trajectoires fixes  
