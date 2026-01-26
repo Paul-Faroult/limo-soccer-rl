@@ -70,15 +70,15 @@ Le projet est entièrement versionné via des branches Git :
 ```
 limo-soccer-rl/
 │
+├── assets/
+│ ├── Duel.gif
+│ ├── Solo.gif
+│ └── env_duel.png
+│
 ├── envs/
 │ ├── limo_soccer_env.py # Environnement solo
 │ ├── limo_soccer_env_static.py # Adversaire statique
 │ └── limo_soccer_env_duel.py # Duel 1v1
-│
-├── train/
-│ ├── train_solo.py
-│ ├── train_static.py
-│ └── train_duel.py
 │
 ├── eval/
 │ ├── evaluation/
@@ -98,6 +98,11 @@ limo-soccer-rl/
 │ ├── models_duel_sans_reward_2_finetune
 │ ├── models_solo
 │ ├── models_static
+│
+├── train/
+│ ├── train_solo.py
+│ ├── train_static.py
+│ └── train_duel.py
 │
 ├── requirements.txt
 └── README.md
@@ -150,32 +155,13 @@ pip install -r requirements.txt
 
 ---
 
-## 🚀 Entraînement
+## 🚀 Entraînement et test
 
 ### Agent solo
 
 ```
 python train/train_solo.py
 ```
-
-### Duel vs static
-
-```
-python train/train_static.py
-```
-
-### Duel 1v1
-
-```
-python train/train_duel.py
-```
-
----
-
-## 🚀 Test
-
-### Agent solo
-
 ```
 python eval/test_solo.py
 ```
@@ -183,11 +169,17 @@ python eval/test_solo.py
 ### Duel vs static
 
 ```
+python train/train_static.py
+```
+```
 python eval/test_static.py
 ```
 
 ### Duel 1v1
 
+```
+python train/train_duel.py
+```
 ```
 python eval/test_vs_models_duel.py
 ```
