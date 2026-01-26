@@ -38,10 +38,8 @@ Le projet est entièrement versionné via des branches Git :
 - **Étape 2 — RL classique**  
   - Positions aléatoires du robot et du ballon  
   - PPO avec γ = 0,99
-  - 
-## ⚽ Solo – Exemple d’épisode
-
-![Solo PPO](assets/Solo.gif)
+-## ⚽ Solo – Exemple d’épisode
+-![Solo PPO](assets/Solo.gif)
 
 
 - **Étape 3 — Adversaire statique**  
@@ -52,9 +50,9 @@ Le projet est entièrement versionné via des branches Git :
   - Deux agents, buts indépendants  
   - Apprentissage par renforcement compétitif
 
-## ⚽ Duel 1v1 – Exemple d’épisode
+-## ⚽ Duel 1v1 – Exemple d’épisode
 
-![Duel PPO](assets/Duel.gif)
+-![Duel PPO](assets/Duel.gif)
 
 
 ### Expérimentations (abandonnées ou exploratoires)
