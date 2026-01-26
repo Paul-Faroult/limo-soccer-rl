@@ -1,8 +1,8 @@
 """
-Docstring for limo_soccer_env_duel_sans_reward
+Docstring for limo_soccer_env_duel
 /!\ Bien pensé à modifier ici les modèles de l'opposant !!!
 """
-from limo_soccer_env import (
+from envs.limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
     FIELD_W, FIELD_H,
@@ -33,7 +33,7 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
 
-from limo_soccer_env_static_opponent_sans_reward import LimoSoccerEnvStaticRobot
+from envs.limo_soccer_env_static import LimoSoccerEnvStaticRobot
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -83,7 +83,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
+            "models/models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
             dummy_env
         )
 
@@ -404,7 +404,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
+        opponent_model_path="models/models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
         render_mode="human"
     )
 

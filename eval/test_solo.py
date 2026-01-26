@@ -5,20 +5,18 @@ from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
 
-from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
+from envs.limo_soccer_env import LimoSoccerEnv
 
 CURRENT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.abspath(os.path.join(CURRENT_DIR, ".."))
 
-LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward_2_finetune")
-MODEL_PATH = os.path.join(LOG_DIR, "ppo_limo_finetune") 
-VEC_PATH = os.path.join(LOG_DIR, "vecnormalize_finetune.pkl")
-
-# Le modèle 7 correspond au modèle qui à été entrainé contre le deuxième robot static
-opponent_model_path = "models_duel_sans_reward_2/ppo_limo_checkpoint.zip"
+LOG_DIR = os.path.join(PROJECT_ROOT, "models/models_solo")
+MODEL_PATH = os.path.join(LOG_DIR, "ppo_limo_checkpoint") 
+VEC_PATH = os.path.join(LOG_DIR, "vecnormalize_checkpoint.pkl")
 
 def make_env(render_mode="human", seed=0):
     def _init():
-        env = LimoSoccerEnvDuel(opponent_model_path, render_mode=render_mode)
+        env = LimoSoccerEnv(render_mode=render_mode)
         env = Monitor(env)
         return env
     return _init

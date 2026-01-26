@@ -2,7 +2,7 @@
 Version contre un robot static sans reward de collisions
 """
 # Hérite du fichier principal
-from limo_soccer_env import (
+from envs.limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
     FIELD_W, FIELD_H,

@@ -3,7 +3,7 @@ import csv
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
-from limo_soccer_env_duel_sans_reward import LimoSoccerEnvDuel
+from limo_soccer_env_duel import LimoSoccerEnvDuel
 
 # ======================================================
 # CONFIG
