@@ -8,10 +8,14 @@ L’objectif est de construire une pipeline **progressive** allant d’un agent 
 
 ## Objectifs du projet
 
+- Concevoir un **environnement Gymnasium** personnalisé pour le football robotique
+- Entraîner un agent via **PPO (Stable-Baselines3)**
 - Apprendre la navigation et le contrôle du ballon de manière robuste  
-- Éviter le sur-apprentissage sur des trajectoires fixes  
 - Gérer des comportements adverses  
 - Comparer les approches classiques et hiérarchiques d'apprentissage par renforcement
+- Comparer les performances des modèles (winrate, buts marqués/encaissés)
+
+Ce projet s’inscrit dans un cadre académique (Projet 5A) et vise une qualité reproductible et analysable.
 
 ---
 
@@ -48,7 +52,30 @@ Le projet est entièrement versionné via des branches Git :
 
 ## Structure du dépôt
 
-- `main` → Implémentation finale du duel  
+- `main` → Implémentation finale du duel
+limo-soccer-rl/
+│
+├── envs/
+│ ├── limo_soccer_env.py # Environnement solo
+│ ├── limo_soccer_env_static.py # Adversaire statique
+│ └── limo_soccer_env_duel.py # Duel 1v1
+│
+├── train/
+│ ├── train_solo.py
+│ ├── train_static.py
+│ └── train_duel.py
+│
+├── eval/
+│ ├── eval_model.py
+│ ├── test_vs_models_duel.py
+│ └── analyze_results.py
+│
+├── models/ # Modèles entraînés (ignoré par git)
+├── logs/ # TensorBoard logs (ignoré par git)
+│
+├── requirements.txt
+├── README.md
+└── .gitignore  
 - `dev` → Branche d'intégration  
 - `stage/*` → Jalons de développement validés  
 - `experiment/*` → Approches exploratoires ou abandonnées
