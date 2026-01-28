@@ -1,6 +1,25 @@
-""""
-Version contre un robot static sans reward de collisions
 """
+Environnement Limo Soccer avec robot statique (sans reward pour collisions).
+
+Classes principales :
+- LimoSoccerEnvStaticRobot : extension de LimoSoccerEnv.
+    - Ajoute un robot statique sur le terrain.
+    - Position et angle initial choisis aléatoirement à chaque reset.
+    - Gère la collision balle ↔ robot statique et voiture ↔ robot statique.
+    - Observation = état parent + position normalisée du robot statique.
+    - Metrics : nombre de collisions statiques pour Tensorboard.
+    - Render complet avec Pygame (voiture principale et robot statique).
+
+Fonctions utilitaires :
+- `_simulate_physics()` : surcharge pour gérer collisions supplémentaires.
+- `step()` : surcharge pour ajouter les collisions statiques à `info`.
+
+Usage :
+- Peut être utilisé pour entraîner un agent à interagir avec un obstacle statique.
+- Supporte test manuel avec contrôle clavier.
+- Pour l’entraînement automatique, `render_mode` peut être mis à `None` pour accélérer les runs.
+"""
+
 # Hérite du fichier principal
 from limo_soccer_env import (
     LimoSoccerEnv,

@@ -1,3 +1,8 @@
+"""
+Évaluation d'un agent PPO sur l'environnement Limo Soccer Duel
+contre un robot statique ou un autre agent pré-entraîné.
+Affiche le rendu en temps réel et calcule la récompense totale par épisode.
+"""
 import os
 import time
 import numpy as np

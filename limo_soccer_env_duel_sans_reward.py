@@ -1,3 +1,26 @@
+"""
+Environnement Limo Soccer Duel avec adversaire contrôlé par un modèle PPO pré-entraîné.
+
+Classes principales :
+- LimoSoccerEnvGhost : environnement fantôme pour normaliser les observations de l'adversaire (VecNormalize).
+  À n'utiliser que pour le chargement et la normalisation, jamais pour step/render.
+
+- LimoSoccerEnvDuel : extension de LimoSoccerEnv intégrant un adversaire fixe.
+  - Charge le modèle PPO de l'adversaire.
+  - Normalise ses observations via VecNormalize.
+  - Calcule la physique et collisions pour les deux voitures.
+  - Fournit un step complet pour l’agent principal et l’adversaire.
+  - Supporte le rendu graphique complet avec Pygame.
+
+Fonctions utilitaires :
+- clamp(x, a, b) : limite une valeur entre a et b.
+- angle_normalize(a) : normalise un angle entre -π et π.
+
+Usage :
+- Peut être utilisé pour tester l’agent humain vs l’adversaire.
+- Supporte le contrôle clavier pour accélération et direction.
+"""
+
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -28,8 +51,11 @@ import time
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
+import os
 
 from limo_soccer_env_static_opponent_sans_reward import LimoSoccerEnvStaticRobot
+
+OPP_PATH = "models_7"
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -79,7 +105,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_7/vecnormalize_checkpoint.pkl",
+            os.path.join(OPP_PATH,"vecnormalize_checkpoint.pkl"),
             dummy_env
         )
 
@@ -368,7 +394,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_7/ppo_limo_checkpoint.zip",
+        opponent_model_path=os.path.join(OPP_PATH,"ppo_limo_checkpoint.zip"),
         render_mode="human"
     )
 
