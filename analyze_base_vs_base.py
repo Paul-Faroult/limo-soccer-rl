@@ -1,3 +1,14 @@
+"""
+Analyse statistique et visualisation des résultats d'évaluation
+entre agents (base vs base).
+
+Ce script :
+- charge les résultats d'épisodes depuis un fichier CSV,
+- calcule des métriques de performance (win rate, buts, différence de buts),
+- génère un tableau récapitulatif par agent,
+- produit des graphiques (barplots et boxplots) sauvegardés sur disque.
+"""
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt

@@ -1,3 +1,11 @@
+"""
+Analyse des résultats d'un duel entre agents.
+
+Ce script charge les résultats d'évaluation depuis un fichier CSV,
+calcule des métriques statistiques par agent (win rate, buts, différence de buts),
+génère un tableau récapitulatif et produit des graphiques sauvegardés sur disque.
+"""
+
 import os
 import pandas as pd
 import matplotlib.pyplot as plt

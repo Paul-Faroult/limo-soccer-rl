@@ -1,3 +1,14 @@
+"""
+Évaluation comparative en duel entre deux agents PPO.
+
+Ce script fait s'affronter un agent de base et un agent finement entraîné
+(no_limit) dans un environnement de duel sans limite. Chaque épisode est
+joué en aller-retour afin de neutraliser l'avantage du premier joueur.
+
+Les résultats (buts marqués, concédés et issue du match) sont enregistrés
+dans un fichier CSV pour analyse statistique.
+"""
+
 import os
 import csv
 from stable_baselines3 import PPO

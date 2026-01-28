@@ -1,7 +1,13 @@
 """
-Docstring for limo_soccer_env_duel_sans_reward
-/!\ Bien pensé à modifier ici les modèles de l'opposant !!!
+Environnement de duel Limo Soccer sans récompense directe sur l'adversaire ni limite de temps.
+
+L'agent principal affronte un adversaire contrôlé par un modèle PPO figé.
+Les observations de l'adversaire sont normalisées via VecNormalize chargé
+depuis un checkpoint externe.
+
+Modifier OPP_PATH pour changer le modèle adverse.
 """
+
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -32,8 +38,11 @@ import time
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
+import os
 
 from limo_soccer_env_static_opponent import LimoSoccerEnvStaticRobot
+
+OPP_PATH = "models_duel_sans_reward_2"
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -83,7 +92,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
+            os.path.join(OPP_PATH,"vecnormalize_checkpoint.pkl"),
             dummy_env
         )
 
@@ -429,7 +438,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
+        opponent_model_path=os.path.join(OPP_PATH,"ppo_limo_checkpoint.zip"),
         render_mode="human"
     )
 

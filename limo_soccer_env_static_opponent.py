@@ -1,6 +1,11 @@
-""""
-Version contre un robot static sans reward de collisions
 """
+Environnement Limo Soccer avec robot statique servant d'obstacle.
+
+Le robot statique n'apporte aucune récompense de collision.
+Utilisé pour entraîner l'agent à éviter des obstacles fixes
+sur la trajectoire balle ↔ but.
+"""
+
 # Hérite du fichier principal
 from limo_soccer_env import (
     LimoSoccerEnv,

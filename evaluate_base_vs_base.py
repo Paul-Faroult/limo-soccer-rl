@@ -1,3 +1,12 @@
+"""
+Évaluation en duel entre deux agents PPO de référence.
+
+Ce script charge deux agents entraînés, les fait s'affronter sur un
+environnement de type duel (aller-retour), enregistre les résultats
+(buts marqués, concédés et issue du match) et sauvegarde les données
+dans un fichier CSV pour analyse ultérieure.
+"""
+
 import os
 import csv
 from stable_baselines3 import PPO
