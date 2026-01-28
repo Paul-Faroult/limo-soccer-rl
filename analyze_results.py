@@ -1,3 +1,24 @@
+"""
+Script d'analyse des résultats de matchs LimoSoccer et visualisation des performances des agents.
+
+Fonctionnalités principales :
+- Lecture des résultats depuis un fichier CSV (résultats des duels entre agents).
+- Nettoyage des données et conversion des résultats en valeurs numériques (win=1, draw=0.5, lose=0).
+- Renommage des agents pour plus de lisibilité (ex: "base" -> "Base", "finetune" -> "Finetune").
+- Calcul de statistiques moyennes par agent :
+    * Win rate moyen (%)
+    * Nombre moyen de buts marqués
+    * Nombre moyen de buts concédés
+- Sauvegarde du résumé statistique dans un fichier CSV.
+- Création de graphiques en barres :
+    * Win rate moyen par agent
+    * Moyenne des buts marqués et concédés par agent
+- Sauvegarde des graphiques dans le dossier d'évaluation.
+
+Usage :
+- Exécution directe pour générer le résumé CSV et les graphiques depuis les données de matchs.
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os

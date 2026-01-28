@@ -1,7 +1,35 @@
 """
-Docstring for limo_soccer_env_duel_sans_reward
-/!\ Bien pensé à modifier ici les modèles de l'opposant !!!
+Module LimoSoccerEnvDuel sans reward spécifique pour l'adversaire.
+
+Fonctionnalités principales :
+- Définit un environnement de type duel pour le robot LimoSoccer.
+- L'agent principal joue contre un adversaire contrôlé par un modèle PPO pré-entraîné.
+- Le modèle adversaire est chargé avec VecNormalize pour normaliser les observations.
+- L'environnement gère :
+    * Les collisions entre voitures
+    * La physique de la balle et des voitures
+    * Le suivi des buts marqués et concédés
+    * La métrique de collisions statiques (pour Tensorboard)
+- Permet d'entraîner ou tester le modèle principal contre un adversaire fixe.
+- Observation :
+    * Position et angle du robot principal
+    * Position et angle de l'adversaire (miroir)
+    * Position de la balle
+    * Position de l'agent principal vue comme obstacle pour l'adversaire
+
+Classe principale :
+- LimoSoccerEnvDuel(LimoSoccerEnv)
+    * Step personnalisé pour simuler l'action de l'adversaire avant celle du robot principal
+    * Observation étendue pour inclure l'état de l'adversaire
+    * Calcul du reward du robot principal
+    * Gestion du rendu graphique (pygame)
+
+Usage :
+- Exécution directe pour tester l'environnement en mode manuel avec clavier.
+- À utiliser pour l'entraînement ou l'évaluation des modèles PPO.
+- NE PAS utiliser la classe LimoSoccerEnvGhost pour le step / render : elle sert uniquement à VecNormalize.
 """
+
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -32,8 +60,11 @@ import time
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
+import os
 
 from limo_soccer_env_static_opponent_sans_reward import LimoSoccerEnvStaticRobot
+
+OPP_PATH = "models_duel_sans_reward_2"
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -83,7 +114,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
+            os.path.join(OPP_PATH,"vecnormalize_checkpoint.pkl"),
             dummy_env
         )
 
@@ -404,7 +435,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
+        opponent_model_path=os.path.join(OPP_PATH,"ppo_limo_checkpoint.zip"),
         render_mode="human"
     )
 

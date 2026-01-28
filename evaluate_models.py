@@ -1,3 +1,21 @@
+"""
+Script d'évaluation des modèles PPO LimoSoccer en duel.
+
+Fonctionnalités principales :
+- Évalue deux modèles (base et finetune) en duels directs sur un nombre défini d'épisodes.
+- Utilise un environnement LimoSoccerEnvDuel où le modèle B est l’adversaire.
+- Collecte les statistiques pour chaque épisode :
+    * Buts marqués
+    * Buts concédés
+    * Résultat du match (win/lose/draw)
+- Sauvegarde les résultats dans un fichier CSV pour analyse ultérieure.
+- Affiche la progression de l’évaluation tous les 50 épisodes.
+
+Usage :
+- Exécution directe pour générer le CSV d’évaluation.
+- Les résultats peuvent ensuite être utilisés pour produire des statistiques ou des graphiques.
+"""
+
 import os
 import csv
 from stable_baselines3 import PPO

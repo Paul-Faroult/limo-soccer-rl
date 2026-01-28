@@ -1,5 +1,27 @@
-""""
-Version contre un robot static sans reward de collisions
+"""
+LimoSoccerEnvStaticRobot : environnement avec un robot statique comme obstacle.
+
+Description :
+-------------
+- Version du jeu LimoSoccer où un robot statique est placé aléatoirement sur le terrain.
+- Ne génère pas de reward pour les collisions avec le robot statique.
+- Permet à l'agent principal de s'entraîner à éviter un obstacle fixe tout en jouant au football.
+- Observation :
+    * Position, angle et vitesse du robot principal et de la balle
+    * Position normalisée du robot statique
+- Physique :
+    * Gestion collisions voiture ↔ balle
+    * Gestion collisions voiture ↔ robot statique
+- Rendu :
+    * Affichage du terrain, de la balle, de la voiture principale et du robot statique avec Pygame
+    * Visualisation de l'état pour debug ou analyse
+- Tensorboard :
+    * Compte le nombre de collisions avec le robot statique dans info["static_collisions"]
+
+Usage :
+------
+- Peut être utilisé pour l'entraînement ou l'évaluation de modèles RL.
+- Test manuel possible via clavier (flèches directionnelles) en exécutant le fichier directement.
 """
 # Hérite du fichier principal
 from limo_soccer_env import (

@@ -13,7 +13,6 @@ LOG_DIR = os.path.join(CURRENT_DIR, "models_duel_sans_reward_2_finetune")
 MODEL_PATH = os.path.join(LOG_DIR, "ppo_limo_finetune") 
 VEC_PATH = os.path.join(LOG_DIR, "vecnormalize_finetune.pkl")
 
-# Le modèle 7 correspond au modèle qui à été entrainé contre le deuxième robot static
 opponent_model_path = "models_duel_sans_reward_2/ppo_limo_checkpoint.zip"
 
 def make_env(render_mode="human", seed=0):
