@@ -1,4 +1,7 @@
-# train.py
+"""
+Entraînement PPO sur LimoSoccerEnv.
+Inclut sauvegarde automatique de checkpoints et suivi des goals sur Tensorboard.
+"""
 import os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize, SubprocVecEnv

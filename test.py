@@ -1,4 +1,7 @@
-# test.py
+"""
+Test script pour un modèle PPO sur LimoSoccerEnv.
+Charge le modèle et VecNormalize si présent, et lance N épisodes avec rendu.
+"""
 import os
 import time
 import numpy as np

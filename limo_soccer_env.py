@@ -405,11 +405,6 @@ class LimoSoccerEnv(gym.Env):
         if self.best_ball_to_goal is None:
             self.best_ball_to_goal = dist_bg
 
-        if self.best_robot_to_ball is None:
-            self.best_robot_to_ball = dist_rb
-        if self.best_ball_to_goal is None:
-            self.best_ball_to_goal = dist_bg
-
         # ---------- PARAMETRE ----------
         MIN_DELTA = 1.0        # px (anti jitter)
         W_RB_DENSE = 0.003     # robot -> balle
