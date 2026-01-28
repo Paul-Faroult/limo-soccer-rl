@@ -1,3 +1,11 @@
+"""
+Script de test pour Limo Soccer Env (RL inference).
+
+- Charge un modèle PPO existant et VecNormalize (si présent)
+- Lance plusieurs épisodes avec rendu humain
+- Affiche les rewards cumulés et steps
+"""
+
 import os
 import time
 import numpy as np

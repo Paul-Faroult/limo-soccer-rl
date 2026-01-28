@@ -1,3 +1,12 @@
+"""
+Script d'entraînement PPO pour Limo Soccer Env.
+
+- Création d'environnement vectorisé SubprocVecEnv
+- Sauvegarde automatique du modèle et du VecNormalize via callback
+- Suivi des goals et collisions pour Tensorboard
+- Possibilité de reprendre l'entraînement depuis un checkpoint existant
+"""
+
 import os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize, SubprocVecEnv
