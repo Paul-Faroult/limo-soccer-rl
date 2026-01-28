@@ -1,6 +1,21 @@
-""""
-Version contre un robot static et implémentation d'une reward pour éviter les collisions
 """
+Version de l'environnement LimoSoccer contre un robot statique avec pénalités pour collisions.
+
+Fonctionnalité :
+- Hérite de LimoSoccerEnv pour ajouter un robot statique sur le terrain.
+- Surcharge de la physique pour gérer les collisions balle ↔ robot et voiture ↔ robot.
+- Surcharge de la reward pour :
+    - pénaliser la proximité du robot statique (reward réduit si trop proche),
+    - pénaliser fortement la collision (quasi-échec).
+- Rendu Pygame adapté pour afficher correctement le robot statique et le joueur.
+- Métriques de collisions disponibles pour Tensorboard.
+
+Usage :
+- Exécuter directement pour tester manuellement avec le clavier.
+- Observation augmentée avec la position du robot statique.
+- Reward adaptée pour l’entraînement de l’agent à éviter les collisions.
+"""
+
 # Hérite du fichier principal
 from limo_soccer_env import (
     LimoSoccerEnv,

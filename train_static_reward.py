@@ -1,3 +1,21 @@
+"""
+Script d'entraînement PPO pour LimoSoccer contre un robot statique avec reward de collision.
+
+Fonctionnalités principales :
+- Crée un environnement LimoSoccerEnvStaticRobot vectorisé ou parallélisé.
+- Intègre VecNormalize pour normaliser observations et rewards.
+- Supporte le chargement de checkpoints existants pour le modèle et VecNormalize.
+- Callback SaveOnStepCallback : sauvegarde automatique du modèle et VecNormalize tous les X timesteps.
+- Callback GoalTensorboardCallback : suivi des goals et collisions dans Tensorboard.
+- Paramètres PPO adaptés à l’entraînement sur plusieurs environnements parallèles.
+- GPU supporté pour accélérer l’entraînement.
+- Sauvegarde finale du modèle et de VecNormalize à la fin de l’entraînement.
+
+Usage :
+- Exécution directe pour entraîner ou reprendre l'entraînement du modèle PPO.
+- Tensorboard peut être lancé pour visualiser les métriques.
+"""
+
 import os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize, SubprocVecEnv

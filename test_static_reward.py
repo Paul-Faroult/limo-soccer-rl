@@ -1,3 +1,17 @@
+"""
+Script de test pour LimoSoccer contre un robot statique avec reward de collision.
+
+Fonctionnalités :
+- Charge l'environnement LimoSoccerEnvStaticRobot avec gestion des collisions et reward adaptée.
+- Support du rendu Pygame pour visualiser les épisodes.
+- Utilisation de VecNormalize si disponible pour normaliser les observations.
+- Permet de charger un modèle PPO entraîné et de le tester sur plusieurs épisodes.
+- Affiche les rewards cumulés et le nombre de steps par épisode.
+
+Usage :
+- Exécution directe pour observer le comportement du modèle contre le robot statique.
+"""
+
 import os
 import time
 import numpy as np
