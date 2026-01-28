@@ -1,3 +1,13 @@
+"""
+Script d'entraînement pour l'environnement Limo Soccer utilisant PPO.
+
+- Utilise plusieurs environnements parallèles via SubprocVecEnv pour accélérer l'entraînement.
+- Charge VecNormalize si disponible pour normaliser les observations et les récompenses.
+- Sauvegarde des checkpoints périodiques du modèle PPO et de VecNormalize.
+- Enregistre les buts et les collisions dans Tensorboard pour le suivi.
+- Prend en charge l'accélération GPU si disponible.
+"""
+
 import os
 import time
 import numpy as np
