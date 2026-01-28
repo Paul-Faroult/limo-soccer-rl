@@ -1,3 +1,21 @@
+"""
+Script de test pour l'environnement LimoSoccerEnvDuel.
+
+Fonctionnalité :
+- Charge un modèle PPO entraîné pour le robot principal.
+- Charge un modèle PPO fixe pour le robot adverse (statique).
+- Utilise VecNormalize si disponible pour normaliser les observations.
+- Exécute plusieurs épisodes en affichage graphique (Pygame).
+- Affiche le nombre de steps et la récompense totale par épisode.
+
+Usage :
+- Exécuter le script directement pour voir le duel en temps réel.
+- Modèle principal et modèle adverse doivent être présents dans les chemins définis.
+
+Notes :
+- L'environnement adverse est utilisé uniquement pour simuler le robot statique sans modifier les récompenses.
+"""
+
 import os
 import time
 import numpy as np

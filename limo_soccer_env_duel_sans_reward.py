@@ -1,3 +1,14 @@
+"""
+Limo Soccer Duel Env
+
+Simulation 2D d'un duel entre deux robots :
+- Robot principal contrôlé par actions manuelles ou RL.
+- Robot adverse contrôlé par un modèle PPO pré-entraîné (statique).
+- Rendu Pygame en temps réel.
+
+Observation : [car_x, car_y, car_angle, ball_x, ball_y, opp_x, opp_y]
+Action      : [accel_norm, steer_norm] dans [-1,1]^2
+"""
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -28,8 +39,11 @@ import time
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
+import os
 
 from limo_soccer_env_static_opponent_sans_reward import LimoSoccerEnvStaticRobot
+
+OPP_PATH = "models_7"
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -79,7 +93,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_7/vecnormalize_checkpoint.pkl",
+            os.path.join(OPP_PATH,"vecnormalize_checkpoint.pkl"),
             dummy_env
         )
 
@@ -368,7 +382,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_7/ppo_limo_checkpoint.zip",
+        opponent_model_path=os.path.join(OPP_PATH,"ppo_limo_checkpoint.zip"),
         render_mode="human"
     )
 
