@@ -1,3 +1,11 @@
+"""
+Environnement Limo Soccer avec un robot statique servant d'obstacle.
+Hérite de LimoSoccerEnv et ajoute :
+    - Gestion d'un obstacle statique aléatoire
+    - Collisions balle ↔ robot statique
+    - Collisions voiture ↔ robot statique
+    - Métriques pour Tensorboard (static_collisions)
+"""
 # Hérite du fichier principal
 from limo_soccer_env import (
     LimoSoccerEnv,

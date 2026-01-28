@@ -1,10 +1,9 @@
 """
-Docstring for train_vs_models_duel
-Fichier pour lancé l'entrainement contre le modèle qui a appris contre qui joue
+Fichier pour lancé l'entrainement contre le modèle qui a appris
 """
 import os
 from stable_baselines3 import PPO
-from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize, SubprocVecEnv
+from stable_baselines3.common.vec_env import VecNormalize, SubprocVecEnv
 from stable_baselines3.common.monitor import Monitor
 from stable_baselines3.common.callbacks import BaseCallback
 from stable_baselines3.common.callbacks import CallbackList

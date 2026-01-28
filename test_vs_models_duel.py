@@ -1,3 +1,8 @@
+"""
+Test script pour le duel Limo Soccer avec un modèle PPO.
+Charge VecNormalize si présent et lance n_episodes en affichage humain.
+"""
+
 import os
 import time
 import numpy as np
