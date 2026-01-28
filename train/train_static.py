@@ -1,3 +1,13 @@
+"""
+Entraînement d'un agent PPO pour Limo Soccer (robot statique).
+
+- Création d'un environnement parallélisé (SubprocVecEnv).
+- Chargement d'un modèle et VecNormalize existants si disponibles.
+- Suivi des buts et collisions via Tensorboard.
+- Sauvegarde automatique du modèle et du VecNormalize tous les X timesteps.
+- Fine-tuning possible à partir d'un checkpoint existant.
+"""
+
 import os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize, SubprocVecEnv

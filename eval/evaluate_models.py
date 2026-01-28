@@ -1,9 +1,17 @@
+"""
+Évaluation duel entre deux agents PPO.
+
+- Base vs Finetune
+- Sauvegarde résultats CSV : goals et résultat (win/draw/lose)
+- Utilise VecNormalize pour normaliser observations adversaire
+"""
+
 import os
 import csv
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from stable_baselines3.common.monitor import Monitor
-from limo_soccer_env_duel import LimoSoccerEnvDuel
+from envs.limo_soccer_env_duel import LimoSoccerEnvDuel
 
 # ======================================================
 # CONFIG

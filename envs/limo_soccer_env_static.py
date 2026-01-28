@@ -1,5 +1,9 @@
 """"
-Version contre un robot static sans reward de collisions
+Version contre un robot statique.
+    
+Observation: [car_x, car_y, car_angle, ball_x, ball_y, static_x, static_y]
+Pas de reward pour collisions avec le robot statique.
+
 """
 # Hérite du fichier principal
 from envs.limo_soccer_env import (

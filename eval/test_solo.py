@@ -1,3 +1,10 @@
+"""
+Test manuel d'un agent PPO sur LimoSoccerEnv (solo).
+
+- Charge le modèle PPO et la normalisation VecNormalize si existante.
+- Exécute plusieurs épisodes avec rendu graphique.
+- Affiche récompense totale et nombre de steps par épisode.
+"""
 import os
 import time
 import numpy as np

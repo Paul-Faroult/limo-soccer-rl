@@ -1,3 +1,12 @@
+"""
+Analyse des résultats duel entre agents.
+
+- Lit results_duel.csv
+- Nettoie et convertit les résultats en valeurs numériques
+- Calcule win rate moyen, buts marqués et concédés
+- Sauvegarde un CSV résumé et deux graphiques (win rate et goals)
+"""
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import os

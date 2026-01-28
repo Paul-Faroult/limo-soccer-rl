@@ -1,3 +1,12 @@
+"""
+Script de test pour un modèle PPO finetuné dans l'environnement LimoSoccerEnvDuel.
+
+- Charge le modèle finetuné et son VecNormalize si présent.
+- Utilise un adversaire figé (modèle précédent).
+- Exécute plusieurs épisodes avec rendu humain.
+- Affiche le nombre de pas et la récompense totale par épisode.
+"""
+
 import os
 import time
 import numpy as np

@@ -1,5 +1,5 @@
 """
-Limo Soccer environment (2D, non-Box2D) .
+Limo Soccer environment (2D) .
 Observation : [car_x, car_y, car_angle, ball_x, ball_y]
 Action      : [accel_norm, steer_norm] in [-1,1]^2
 Le robot et la balle apparaissent de manière aléatoire
@@ -371,11 +371,6 @@ class LimoSoccerEnv(gym.Env):
         if self.best_ball_to_goal is None:
             self.best_ball_to_goal = dist_bg
 
-        if self.best_robot_to_ball is None:
-            self.best_robot_to_ball = dist_rb
-        if self.best_ball_to_goal is None:
-            self.best_ball_to_goal = dist_bg
-
         # ---------- PARAMETRE ----------
         MIN_DELTA = 1.0        # px (anti jitter)
         W_RB_DENSE = 0.003     # robot -> balle
@@ -566,6 +561,11 @@ class LimoSoccerEnv(gym.Env):
 
 # ---------------- test manuel ----------------
 if __name__ == "__main__":
+    """
+    Test manuel de l'environnement Limo Soccer.
+    Permet de contrôler le robot avec les flèches ou de simuler aléatoirement.
+    """
+    
     print("=== Limo Soccer Env (manual test) ===")
     env = LimoSoccerEnv(render_mode="human")
     obs, _ = env.reset()

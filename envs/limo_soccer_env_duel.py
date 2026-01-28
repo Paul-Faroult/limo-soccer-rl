@@ -1,6 +1,10 @@
 """
-Docstring for limo_soccer_env_duel
-/!\ Bien pensé à modifier ici les modèles de l'opposant !!!
+Environnement Duel contre un robot contrôlé par un modèle PPO.
+
+Observations: [car_x, car_y, car_angle, ball_x, ball_y, opp_x, opp_y]
+Le robot adverse est simulé sans reward.
+Metrics disponibles: static_collisions, goals_agent, goals_opponent, result
+
 """
 from envs.limo_soccer_env import (
     LimoSoccerEnv,
@@ -32,8 +36,12 @@ import time
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
+import os
 
 from envs.limo_soccer_env_static import LimoSoccerEnvStaticRobot
+
+# Chemin du modèle adverse
+OPP_PATH = "models/models_duel_sans_reward_2"
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -82,8 +90,8 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         # Dummy env juste pour VecNormalize
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
-        self.opp_vecnorm = VecNormalize.load(
-            "models/models_duel_sans_reward_2/vecnormalize_checkpoint.pkl",
+        self.opp_vecnorm = VecNormalize.load(os.path.join
+            (OPP_PATH,"vecnormalize_checkpoint.pkl"),
             dummy_env
         )
 
@@ -132,6 +140,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 
         return self._observe(), info
     
+    # Applique uniquement l'action donnée sur l’état du robot courant (rotation + vitesse).
     def _apply_action_only(self, action):
         action = np.asarray(action, dtype=np.float32)
         accel = float(clamp(action[0], -1.0, 1.0))
@@ -169,7 +178,16 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
     # ========================================================
     # STEP (PHYSIQUE UNIQUE)
     # ========================================================
+
     def step(self, action):
+        """
+        Exécute une étape complète :
+       - calcule action du modèle adverse
+       - simule physique du robot adverse
+       - gère collisions
+       - exécute action agent principal
+       - retourne observation, reward, terminated, truncated, info
+        """
 
         # ==================================================
         # ACTION ADVERSAIRE (modèle figé)
@@ -404,7 +422,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models/models_duel_sans_reward_2/ppo_limo_checkpoint.zip",
+        opponent_model_path= os.path.join(OPP_PATH,"ppo_limo_checkpoint.zip"),
         render_mode="human"
     )
 
