@@ -1,4 +1,9 @@
-# train.py
+"""
+Script pour entraîner un modèle PPO sur l'environnement LimoSoccerEnv.
+Le script gère les checkpoints automatiques, la normalisation VecNormalize,
+le suivi du nombre de buts et l'arrêt anticipé si un objectif de buts est atteint.
+"""
+
 import os
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize

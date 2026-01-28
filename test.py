@@ -1,4 +1,8 @@
-# test.py
+"""
+Script pour tester un modèle PPO entraîné sur l'environnement LimoSoccerEnv.
+Le script charge le modèle et éventuellement la normalisation VecNormalize,
+exécute plusieurs épisodes en affichant les rewards cumulés et steps.
+"""
 import os
 import time
 import numpy as np

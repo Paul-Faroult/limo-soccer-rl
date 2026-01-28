@@ -937,9 +937,6 @@ class LimoSoccerEnv(gym.Env):
         REWARD_GOAL = 10.0           # gros bonus quand on marque
         REWARD_BAD_GOAL = -5.0       # mal marquer dans le mauvais but
         REWARD_OUT = -2.0            # sortir du terrain
-        REWARD_STEP = -0.01           # petit coût par step pour inciter à aller vite
-        PUSH_BONUS = 1.0           # bonus pour pousser la balle vers le but
-        BEHIND_BONUS = 0.1           # bonus pour être derrière la balle correctement
         # ---------- recompense (reward shaping) ----------
         obs = self._observe()
 
