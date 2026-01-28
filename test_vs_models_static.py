@@ -1,3 +1,7 @@
+"""
+Script pour tester un modèle PPO sur l'environnement LimoSoccerEnvDuel.
+Charge le modèle, éventuellement la normalisation VecNormalize, et lance N épisodes.
+"""
 import os
 import time
 import numpy as np

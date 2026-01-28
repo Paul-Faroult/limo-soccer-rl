@@ -1,3 +1,25 @@
+"""
+LimoSoccerEnvStaticRobot
+
+Environnement de simulation pour apprentissage par renforcement avec un robot statique comme obstacle.
+
+Fonctionnalités :
+- Hérite de LimoSoccerEnv.
+- Intègre un robot statique placé aléatoirement sur le terrain.
+- Observation : position et angle du robot statique ajoutés aux observations de l'agent.
+- Reward : pénalités si l'agent gêne ou entre en collision avec le robot statique.
+- Gestion des collisions balle ↔ robot statique et voiture ↔ robot statique.
+- Compatible avec Stable-Baselines3 (VecNormalize, PPO).
+- Support du rendu Pygame pour visualisation.
+- Metrics : collisions avec le robot statique accessibles pour Tensorboard.
+
+Usage :
+env = LimoSoccerEnvStaticRobot(render_mode="human")
+obs, info = env.reset()
+obs, reward, terminated, truncated, info = env.step(action)
+env.render()
+"""
+
 # Hérite du fichier principal
 from limo_soccer_env import (
     LimoSoccerEnv,

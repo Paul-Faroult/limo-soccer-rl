@@ -1,3 +1,22 @@
+"""
+LimoSoccerEnvDuel
+
+Environnement de simulation de duel entre deux voitures pour apprentissage par renforcement.
+Le robot principal contrôle une voiture tandis que l'adversaire est piloté par un modèle PPO pré-entraîné.
+
+Fonctionnalités principales :
+- Intègre un adversaire figé pour entraîner l'agent.
+- Observation : position, angle, vitesse de la balle et de l'adversaire.
+- Reward inclut pénalités pour collisions avec l'adversaire.
+- Compatible avec Stable-Baselines3 (VecNormalize, PPO).
+- Support du rendu via Pygame pour visualisation.
+
+Usage :
+env = LimoSoccerEnvDuel(opponent_model_path="path/to/model.zip", render_mode="human")
+obs, info = env.reset()
+obs, reward, terminated, truncated, info = env.step(action)
+env.render()
+"""
 from limo_soccer_env import (
     LimoSoccerEnv,
     FIELD_LEFT, FIELD_RIGHT, FIELD_TOP, FIELD_BOTTOM,
@@ -28,8 +47,11 @@ import time
 from stable_baselines3 import PPO
 from stable_baselines3.common.vec_env import DummyVecEnv, VecNormalize
 from gymnasium import spaces
+import os
 
 from limo_soccer_env_static_opponent import LimoSoccerEnvStaticRobot
+
+OPP_PATH = "models_7"
 
 def clamp(x, a, b):
     return max(a, min(b, x))
@@ -79,7 +101,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
         dummy_env = DummyVecEnv([lambda: LimoSoccerEnvGhost()])
 
         self.opp_vecnorm = VecNormalize.load(
-            "models_7/vecnormalize_checkpoint.pkl",
+            os.path.join(OPP_PATH,"vecnormalize_checkpoint.pkl"),
             dummy_env
         )
 
@@ -387,7 +409,7 @@ class LimoSoccerEnvDuel(LimoSoccerEnv):
 if __name__ == "__main__":
 
     env = LimoSoccerEnvDuel(
-        opponent_model_path="models_7/ppo_limo_checkpoint.zip",
+        opponent_model_path=os.path.join(OPP_PATH,"ppo_limo_checkpoint.zip"),
         render_mode="human"
     )
 

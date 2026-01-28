@@ -1,5 +1,4 @@
 """
-Docstring for train_vs_models_static
 Fichier pour lancé l'entrainement contre le modèle qui a appris contre le robot static
 """
 import os
